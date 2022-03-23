@@ -29,7 +29,7 @@ document.addEventListener('keydown', function (e) {
     closeModal();
   }
 });
-
+/*
 // selecting elements
 
 //entire html
@@ -70,3 +70,45 @@ headerElement.append(message);
 message
   .querySelector('.btn--close-cookie')
   .addEventListener('click', () => message.remove());
+
+// styles
+
+message.style.backgroundColor = '#37383d';
+message.style.width = '120%';
+console.log(message.style.backgroundColor); // reading styles only works if they are inline and set by ourselves
+
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height, 10) + 40 + 'px';
+
+console.log(getComputedStyle(message).height);
+
+// css custom properties
+
+document.documentElement.style.setProperty('--color-primary', 'orangered');
+
+// attributes src, alt, id, class - we can change in js
+
+const logo = document.querySelector('.nav__logo');
+console.log(logo.src);
+console.log(logo.alt);
+
+logo.alt = 'Beautiful minimalist logo';
+console.log(logo.alt);
+
+logo.setAttribute('company', 'Bankist');
+
+logo.getAttribute('src');
+
+// data attributes
+console.log(logo.dataset.versionNumber);
+
+//classes
+logo.classList.add('c', 'j');
+logo.classList.remove('c');
+logo.classList.toggle('c');
+logo.classList.contains('c');
+
+//dont use
+logo.className = 'John';
+
+*/
