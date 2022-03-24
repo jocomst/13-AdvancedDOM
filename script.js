@@ -40,6 +40,15 @@ scrollToButton.addEventListener('click', e => {
 
   section1.scrollIntoView({ behavior: 'smooth' });
 });
+
+//page navigation
+
+document.querySelectorAll('.nav__link').forEach(node => {
+  node.addEventListener('click', function (e) {
+    e.preventDefault();
+    const id = this.getAttribute('href');
+  });
+});
 // console.log(e.target.getBoundingClientRect());
 // console.log('current scroll (x/y)', window.pageXOffset, window.pageYOffset);
 // console.log(
