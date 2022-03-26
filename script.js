@@ -7,6 +7,14 @@ const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+//nav bar
+const navBar = document.querySelector('.nav');
+const navLinks = document.querySelector('.nav__link');
+const navItems = document.querySelectorAll('.nav__item');
+//options
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabContent = document.querySelectorAll('.operations__content');
 
 const openModal = function (e) {
   e.preventDefault();
@@ -43,12 +51,101 @@ scrollToButton.addEventListener('click', e => {
 
 //page navigation
 
-document.querySelectorAll('.nav__link').forEach(node => {
-  node.addEventListener('click', function (e) {
-    e.preventDefault();
-    const id = this.getAttribute('href');
-  });
+// document.querySelectorAll('.nav__link').forEach(node => {
+//   node.addEventListener('click', function (e) {
+//     e.preventDefault();
+//     const id = this.getAttribute('href');
+//     console.log(id);
+//     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+//   });
+// });
+
+// event delegation - using bubbling to avoid having to add event listeners to everything
+
+//first add eventlistener to common parent
+// determine what element originated the event
+
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault();
+
+  //matching strategy
+  if (e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href');
+    console.log(id);
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  }
 });
+
+tabsContainer.addEventListener('click', function (e) {
+  const clicked = e.target.closest('.operations__tab');
+  // console.log(clicked);
+  //guard clause
+  if (!clicked) return;
+  //active tabs
+  tabs.forEach(t => t.classList.remove('operations__tab--active'));
+  tabContent.forEach(t => t.classList.remove('operations__content--active'));
+  clicked.classList.add('operations__tab--active');
+  // content area
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
+});
+
+// nav bar fade
+
+const handleHover = function (e) {
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    siblings.forEach(el => {
+      if (el !== link) el.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
+};
+//passing in argument into handler function
+navBar.addEventListener('mouseover', handleHover.bind(0.5));
+navBar.addEventListener('mouseout', handleHover.bind(1));
+
+// const initialCords = section1.getBoundingClientRect();
+// console.log(initialCords);
+// //sticky navigation
+// window.addEventListener('scroll', function () {
+//   if (window.scrollY > initialCords.top) {
+//     navBar.classList.add('sticky');
+//   } else navBar.classList.add('sticky');
+// });
+// const obsCallback = function (entries, observer) {
+//   entries.forEach(thresh => {
+//     console.log(thresh);
+//   });
+// };
+
+// const observerOptions = {
+//   root: null,
+//   threshold: [0, 0.2],
+// };
+// const observer = new IntersectionObserver(obsCallback, observerOptions);
+// observer.observe(section1);
+
+const header = document.querySelector('.header');
+const navHeight = navBar.getBoundingClientRect().height;
+
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  console.log(entry);
+  if (!entry.isIntersecting) {
+    navBar.classList.add('sticky');
+  } else navBar.classList.remove('sticky');
+};
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+});
+headerObserver.observe(header);
 // console.log(e.target.getBoundingClientRect());
 // console.log('current scroll (x/y)', window.pageXOffset, window.pageYOffset);
 // console.log(
@@ -206,3 +303,33 @@ document.querySelector('.nav').addEventListener('click', function (e) {
 });
 
 */
+
+// const h1 = document.querySelector('h1');
+
+// //going downwards: child
+
+// console.log(h1.querySelectorAll('.highlight'));
+// console.log(h1.childNodes);
+// console.log(h1.children);
+// h1.firstElementChild.style.color = 'white';
+// h1.lastElementChild.style.color = 'orangered';
+
+// // going upwards
+
+// console.log(h1.parentNode);
+// console.log(h1.parentElement);
+
+// h1.closest('.header').style.background = 'var(--gradient-secondary)';
+// h1.closest('h1').style.background = 'var(--gradient-primary)';
+
+// // going sideways: siblings
+
+// console.log(h1.previousElementSibling);
+// console.log(h1.nextElementSibling);
+// console.log(h1.previousSibling);
+// console.log(h1.nextSibling);
+
+// console.log(h1.parentElement.children);
+// [...h1.parentElement.children].forEach(function (el) {
+//   if (el !== h1) el.style.transform = 'scale(0.5)';
+// });
