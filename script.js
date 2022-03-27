@@ -171,7 +171,7 @@ allSections.forEach(section => {
 
 const imageTargets = document.querySelectorAll(`img[data-src]`);
 
-console.log(imageTargets);
+// console.log(imageTargets);
 
 const loadImages = function (entries, observer) {
   const [entry] = entries;
@@ -194,6 +194,88 @@ const imageObserver = new IntersectionObserver(loadImages, {
 imageTargets.forEach(image => {
   imageObserver.observe(image);
 });
+
+// fixing slider
+
+const sliders = function () {
+  const slides = document.querySelectorAll('.slide');
+  const btnLeft = document.querySelector('.slider__btn--left');
+  const btnRight = document.querySelector('.slider__btn--right');
+  const dotContainer = document.querySelector('.dots');
+
+  const maxSlides = slides.length - 1;
+  let currentSlide = 0;
+
+  // const slider = document.querySelector('.slider');
+  // slider.style.transform = `scale(0.2)`;
+  // slider.style.overflow = `visible translateX(-800px)`;
+
+  const createDots = function () {
+    slides.forEach((_, i) => {
+      dotContainer.insertAdjacentHTML(
+        'beforeend',
+        `<button class="dots__dot" data-slide="${i}"></button>`
+      );
+    });
+  };
+
+  const activeButton = function (slide) {
+    document.querySelectorAll('.dots__dot').forEach(dot => {
+      dot.classList.remove('dots__dot--active');
+
+      document
+        .querySelector(`.dots__dot[data-slide="${slide}"]`)
+        .classList.add('dots__dot--active');
+    });
+  };
+
+  const goToSlide = function (currentSlide) {
+    slides.forEach((slide, index) => {
+      slide.style.transform = `translateX(${100 * (index - currentSlide)}%)`;
+    });
+  };
+
+  const nextSlide = function () {
+    currentSlide === maxSlides ? (currentSlide = 0) : currentSlide++;
+    goToSlide(currentSlide);
+    activeButton(currentSlide);
+  };
+
+  const prevSlide = function () {
+    currentSlide <= 0 ? (currentSlide = maxSlides) : currentSlide--;
+    goToSlide(currentSlide);
+    activeButton(currentSlide);
+  };
+
+  const init = function () {
+    createDots();
+    goToSlide(0);
+    activeButton(0);
+  };
+
+  init();
+  //next slide
+  btnRight.addEventListener('click', nextSlide);
+  btnLeft.addEventListener('click', prevSlide);
+
+  document.addEventListener('keydown', function (e) {
+    console.log(e);
+    e.key === 'ArrowRight' && nextSlide();
+    e.key === 'ArrowLeft' && prevSlide();
+  });
+
+  //button functionality
+  dotContainer.addEventListener('click', function (e) {
+    if (e.target.classList.contains('dots__dot')) {
+      const { slide } = e.target.dataset;
+      goToSlide(slide);
+      activeButton(slide);
+    }
+  });
+};
+
+sliders();
+//current slide = 1 at 0%, second 100%, etc,
 // console.log(e.target.getBoundingClientRect());
 // console.log('current scroll (x/y)', window.pageXOffset, window.pageYOffset);
 // console.log(
